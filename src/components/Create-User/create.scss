@@ -1,0 +1,28 @@
+.create-div {
+    color: #eee;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    
+    h2 {
+        margin: auto;
+    }
+
+    button {
+        margin: 25px auto auto auto;
+        width: 125px;
+        height: 65px;
+        outline: none;
+        border: none;
+        padding: 15px 15px;
+        background-color: #66B266;
+        color: white;
+        cursor: pointer;
+        font-size: 18px;
+        border-radius: 5px;
+
+        &:hover {
+            opacity: .85;
+        }
+    }
+}

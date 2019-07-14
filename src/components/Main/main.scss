@@ -1,0 +1,25 @@
+.main {
+    background-color: #303133;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+
+.authenticated {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    
+    .light-grid {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+
+        .subdiv {
+            margin: auto;
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+    }
+}
+}

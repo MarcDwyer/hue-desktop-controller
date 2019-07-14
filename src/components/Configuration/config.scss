@@ -1,0 +1,25 @@
+.config-parent {
+    display: flex;
+    position: absolute;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    color: #eee;
+    background-color: rgba(68,69,71, 0.55);
+
+    .configuration {
+        min-height: 550px;
+        display: flex;
+        margin: auto;
+        flex-direction: column;
+        min-width: 400px;
+        position: relative;
+        background-color: rgba(68,69,71, 1);
+
+        .sketch-picker {
+            margin: auto;
+        }
+    }
+}
