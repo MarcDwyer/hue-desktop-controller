@@ -33,7 +33,7 @@ ipcMain.on('set-node-bridge', (evt, args) => {
 })
 LightListeners()
 
-let mainWindow;
+let mainWindow
 function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1280,
@@ -42,7 +42,6 @@ function createWindow() {
             nodeIntegration: true
         }
     });
-    path.resolve()
     mainWindow.loadURL(
         isDev ?
             "http://localhost:3000" :
