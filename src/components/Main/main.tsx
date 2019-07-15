@@ -4,7 +4,6 @@ import Light from '../Light/light'
 import CreateUser from '../Create-User/create'
 import ColorPicker from '../Configuration/config'
 import './main.scss'
-import { ColorPayload } from '../Configuration/config'
 
 export type LightParent = {
     [id: number]: LightType;
@@ -39,6 +38,7 @@ type State = {
     selectedLight: number | null;
     bridge: Bridge | null;
     electronSet: boolean;
+    error: ErrorMessage | null;
 }
 export type Bridge = {
     host: string;
@@ -53,6 +53,10 @@ export interface HSL {
     s: number;
     l: number;
 }
+export type ErrorMessage = {
+    message: string;
+    type: number;
+}
 class Main extends Component<{}, State> {
     public ipcRender: any;
     constructor(props) {
@@ -63,6 +67,7 @@ class Main extends Component<{}, State> {
             lights: null,
             bridge,
             selectedLight: null,
+            error: null,
             electronSet: false
         }
     }
@@ -83,8 +88,8 @@ class Main extends Component<{}, State> {
             <div className="main container" >
                 {!this.state.bridge && (
                     <CreateUser
-                        setBridge={this.setBridge}
                         bridge={this.state.bridge}
+                        error={this.state.error}
                     />
                 )}
                 {lights && (
@@ -126,7 +131,11 @@ class Main extends Component<{}, State> {
             this.setState({ lights })
         })
         ipcRenderer.on('is-set', (evt, isSet) => {
-            this.setState({ electronSet: true })
+            this.setState({ electronSet: true, error: null })
+        })
+        ipcRenderer.on('bridge-error', (e, data: ErrorMessage) => {
+            console.log(data)
+            this.setState({ error: data })
         })
     }
     giveElectronBridge = () => {
@@ -136,8 +145,8 @@ class Main extends Component<{}, State> {
         this.setState({ selectedLight: key })
     }
     sendChangeToNode = (id: number, data: any, method?: string) => {
-        console.log({id, data, method})
-        ipcRenderer.send(method, {id, data})
+        console.log({ id, data, method })
+        ipcRenderer.send(method, { id, data })
         this.updateLight(id, data, method)
     }
     updateLight = (id: number, data?: any, method?: string) => {
@@ -155,10 +164,6 @@ class Main extends Component<{}, State> {
                 updateLight.state.on = !data
         }
         this.setState({ lights: shallow })
-    }
-    setBridge = (bridge: Bridge) => {
-        localStorage.setItem("bridge", JSON.stringify(bridge))
-        this.setState({ bridge })
     }
 }
 

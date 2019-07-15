@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Bridge } from '../Main/main'
+import { Bridge, ErrorMessage } from '../Main/main'
 import { ipcRenderer } from 'electron'
 
 import './create.scss'
 
 interface Props {
     bridge: Bridge;
-    setBridge: Function;
+    error: ErrorMessage | null;
 }
 
 const CreateUser = (props: Props) => {
@@ -23,7 +23,7 @@ const CreateUser = (props: Props) => {
 
     return (
         <div className="create-div">
-            <h2>{msg}</h2>
+            <h2 className="set-bridge-message">{props.error ? props.error.message : msg}</h2>
             <button
             disabled={status}
             onClick={async() => {

@@ -21,6 +21,7 @@
   },
   "include": [
     "src",
-    "electron", "Methods", "public/main.js"
+    "electron", 
+    "Methods"
   ]
 }

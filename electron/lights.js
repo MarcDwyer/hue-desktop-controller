@@ -66,7 +66,6 @@ exports.LightListeners = function () {
                         obj[item.id] = item;
                         return obj;
                     }, {});
-                    console.log(payload);
                     evt.reply('light-data', payload);
                     return [3 /*break*/, 3];
                 case 2:

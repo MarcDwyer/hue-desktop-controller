@@ -54,6 +54,12 @@
           }
       }
   }
+  @media(max-width: 1250px) {
+     width: 45%;
+  }
+  @media(max-width: 850px) {
+   width: 95%;
+}
 }
 
 

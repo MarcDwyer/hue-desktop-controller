@@ -60,8 +60,6 @@ export const LightListeners = () => {
                 obj[item.id] = item
                 return obj
             }, {})
-
-            console.log(payload)
             evt.reply('light-data', payload)
         } catch (err) {
             console.log(err)

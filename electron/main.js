@@ -51,7 +51,6 @@ electron_1.ipcMain.on('get-new-bridge', function (e) { return __awaiter(_this, v
                 return [4 /*yield*/, hue.nupnpSearch()];
             case 1:
                 bridge = _a.sent();
-                console.log('this shouldnt run../..');
                 ipaddress = bridge[0].ipaddress;
                 return [4 /*yield*/, exports.HueBridge.registerUser(ipaddress, 'hue-controller')];
             case 2:
@@ -60,7 +59,7 @@ electron_1.ipcMain.on('get-new-bridge', function (e) { return __awaiter(_this, v
                 return [3 /*break*/, 4];
             case 3:
                 err_1 = _a.sent();
-                console.log(err_1);
+                e.reply("bridge-error", err_1);
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
@@ -81,7 +80,9 @@ function createWindow() {
         height: 720,
         webPreferences: {
             nodeIntegration: true
-        }
+        },
+        backgroundColor: "#303133",
+        autoHideMenuBar: true
     });
     mainWindow.loadURL(isDev ?
         "http://localhost:3000" :

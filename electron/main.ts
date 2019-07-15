@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
 import { LightListeners } from './lights'
 import * as hue from 'node-hue-api'
-const path = require("path");
+import * as path from 'path'
 const isDev = require("electron-is-dev");
 
 
@@ -16,12 +16,11 @@ interface Bridge {
 ipcMain.on('get-new-bridge', async (e) => {
     try {
         const bridge = await hue.nupnpSearch()
-        console.log('this shouldnt run../..')
         const { ipaddress } = bridge[0]
         const user = await HueBridge.registerUser(ipaddress, 'hue-controller')
         e.reply('get-bridge', { host: ipaddress, user })
     } catch (err) {
-        console.log(err)
+        e.reply("bridge-error", err)
     }
 })
 ipcMain.on('set-node-bridge', (evt, args: Bridge) => {
@@ -40,7 +39,9 @@ function createWindow() {
         height: 720,
         webPreferences: {
             nodeIntegration: true
-        }
+        },
+        backgroundColor: "#303133",
+        autoHideMenuBar: true
     });
     mainWindow.loadURL(
         isDev ?
