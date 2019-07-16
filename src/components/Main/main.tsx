@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { ipcRenderer } from 'electron'
+import { xyBriToRgb, RGBtoXY } from '../../Methods/methods'
 import Light from '../Light/light'
 import CreateUser from '../Create-User/create'
 import ColorPicker from '../Configuration/config'
+import * as hue from 'node-hue-api'
 import './main.scss'
 
 export type LightParent = {
@@ -36,13 +37,13 @@ export interface BrightnessPayload {
 type State = {
     lights: LightParent | null;
     selectedLight: number | null;
-    bridge: Bridge | null;
-    electronSet: boolean;
-    error: ErrorMessage | null;
+    hueBridge: hue.HueApi | null;
+    bridgeData: BridgeData | null;
+    error: string | null;
 }
-export type Bridge = {
-    host: string;
+export type BridgeData = {
     user: string;
+    host: string;
 }
 export type ColorPayload = {
     id: number;
@@ -58,38 +59,30 @@ export type ErrorMessage = {
     type: number;
 }
 class Main extends Component<{}, State> {
-    public ipcRender: any;
     constructor(props) {
         super(props);
-        this.setListeners()
-        const bridge = localStorage.getItem("bridge") ? JSON.parse(localStorage.getItem("bridge")) : null
+        const bridgeData = localStorage.getItem("bridgeData") ? JSON.parse(localStorage.getItem("bridgeData")) : null
         this.state = {
             lights: null,
-            bridge,
+            bridgeData,
             selectedLight: null,
-            error: null,
-            electronSet: false
+            hueBridge: null,
+            error: null
         }
     }
     componentDidMount() {
-        if (this.state.bridge) this.giveElectronBridge()
-    }
-    componentDidUpdate(prevProps, prevState: State) {
-        if (prevState.electronSet !== this.state.electronSet) {
-            ipcRenderer.send('give-lights')
-        } else if (prevState.bridge !== this.state.bridge) {
-            this.giveElectronBridge()
+        if (this.state.bridgeData) {
+            this.setHueBridge()
         }
     }
     render() {
         const { lights, selectedLight } = this.state
-        console.log(this.state)
         return (
             <div className="main container" >
-                {!this.state.bridge && (
+                {!this.state.bridgeData && (
                     <CreateUser
-                        bridge={this.state.bridge}
-                        error={this.state.error}
+                        bridge={this.state.bridgeData}
+                        setHueBridge={this.setHueBridge}
                     />
                 )}
                 {lights && (
@@ -102,8 +95,7 @@ class Main extends Component<{}, State> {
                                             light={i}
                                             setLight={this.setSelectedLight}
                                             selectedLight={selectedLight} key={i.name}
-                                            sendChangeToNode={this.sendChangeToNode}
-
+                                            alterLight={this.alterLight}
                                         />
                                     )
                                 })}
@@ -111,59 +103,89 @@ class Main extends Component<{}, State> {
                         </div>
                     </div>
                 )}
-                {selectedLight && (
+                {lights && selectedLight && lights[selectedLight] && lights[selectedLight].rgb && (
                     <ColorPicker
                         selectedLight={this.state.selectedLight}
                         lights={this.state.lights}
                         setLight={this.setSelectedLight}
-                        sendChangeToNode={this.sendChangeToNode}
+                        alterLight={this.alterLight}
                     />
                 )}
             </div >
         )
     }
-    setListeners = () => {
-        ipcRenderer.on('get-bridge', (e, args: Bridge) => {
-            localStorage.setItem("bridge", JSON.stringify(args))
-            this.setState({ bridge: args })
-        })
-        ipcRenderer.on('light-data', (e, lights: LightParent) => {
-            this.setState({ lights })
-        })
-        ipcRenderer.on('is-set', (evt, isSet) => {
-            this.setState({ electronSet: true, error: null })
-        })
-        ipcRenderer.on('bridge-error', (e, data: ErrorMessage) => {
-            console.log(data)
-            this.setState({ error: data })
-        })
-    }
-    giveElectronBridge = () => {
-        ipcRenderer.send('set-node-bridge', this.state.bridge)
-    }
     setSelectedLight = (key: number | null) => {
         this.setState({ selectedLight: key })
     }
-    sendChangeToNode = (id: number, data: any, method?: string) => {
-        console.log({ id, data, method })
-        ipcRenderer.send(method, { id, data })
-        this.updateLight(id, data, method)
+    alterLight = async (id: number, data: any, method: string) => {
+        console.log({id, data, method})
+        const { hueBridge } = this.state
+        let state = hue.lightState.create();
+        let isSet = true;
+        try {
+            switch (method) {
+                case "color":
+                    const [x, y] = RGBtoXY(data[0], data[1], data[2])
+                    isSet = await hueBridge.setLightState(id, state.xy(x, y))
+                    break
+                case "brightness":
+                    isSet = await hueBridge.setLightState(id, state.bri(data))
+                    break;
+                case "power":
+                    isSet = await hueBridge.setLightState(id, data ? state.on() : state.off())
+            }
+            if (!isSet) throw "Error changing light!"
+            this.updateLight(id, data, method)
+        } catch (err) {
+            if (typeof err === 'string') this.setState({ error: err })
+        }
     }
     updateLight = (id: number, data?: any, method?: string) => {
         const shallow: LightParent = this.state.lights
         const updateLight = shallow[id]
         switch (method) {
-            case "color-change":
+            case "color":
                 updateLight.rgb = data
                 break;
-            case "brightness-change":
+            case "brightness":
                 updateLight.state.bri = data
                 break;
-            case "power-change":
-                if (updateLight.state.on === !data) return
-                updateLight.state.on = !data
+            case "power":
+                if (updateLight.state.on === data) return
+                updateLight.state.on = data
         }
         this.setState({ lights: shallow })
+    }
+    setHueBridge = (hueData?: BridgeData) => {
+        if (hueData) {
+            this.setState({ hueBridge: new hue.HueApi(hueData.host, hueData.user), bridgeData: hueData }, () => this.getLights())
+            return
+        } else if (this.state.bridgeData) {
+            const { bridgeData } = this.state
+            this.setState({ hueBridge: new hue.HueApi(bridgeData.host, bridgeData.user) }, () => this.getLights())
+        }
+    }
+    getLights = async () => {
+        const { hueBridge } = this.state
+        try {
+            const { lights } = await hueBridge.lights()
+            const lightData = lights.map(light => {
+                return {
+                    id: light.id,
+                    name: light.name,
+                    state: light.state,
+                    rgb: light.state.xy ? xyBriToRgb(light.state.xy[0], light.state.xy[1], light.state.bri) : null,
+                    type: light.type
+                }
+            }).reduce((obj, item) => {
+                obj[item.id] = item
+                return obj
+            }, {})
+            console.log(lightData)
+            this.setState({ lights: lightData })
+        } catch (err) {
+            console.log(err)
+        }
     }
 }
 

@@ -3,6 +3,7 @@
     height: 100vh;
     width: 100vw;
     display: flex;
+    overflow-y: auto;
 
 .authenticated {
     height: 100%;
@@ -21,6 +22,9 @@
 
             @media (min-width: 1920px) {
                 width: 75%;
+            }
+            @media(max-width: 1250px) {
+                width: 95%;
             }
         }
     }

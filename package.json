@@ -1,5 +1,5 @@
 {
-  "name": "hue-controller",
+  "name": "huecontroller",
   "version": "0.1.0",
   "private": true,
   "main": "electron/main.js",
@@ -24,6 +24,7 @@
     "babel-preset-react-app": "^9.0.0",
     "camelcase": "^5.2.0",
     "case-sensitive-paths-webpack-plugin": "2.2.0",
+    "color-wheel": "^1.2.3",
     "concurrently": "^4.1.1",
     "create-react-class": "^15.6.3",
     "cross-env": "^5.2.0",
@@ -31,6 +32,7 @@
     "dotenv": "6.2.0",
     "dotenv-expand": "4.2.0",
     "electron-is-dev": "^1.1.0",
+    "electron-windows-store": "^2.1.0",
     "eslint": "^5.16.0",
     "eslint-config-react-app": "^4.0.1",
     "eslint-loader": "2.1.2",
@@ -62,9 +64,11 @@
     "react": "^16.8.6",
     "react-app-polyfill": "^1.0.1",
     "react-color": "^2.17.3",
+    "react-colour-wheel": "^1.0.7",
     "react-dev-utils": "^9.0.1",
     "react-dom": "^16.8.6",
     "react-slider": "^0.11.2",
+    "react-spring": "^8.0.27",
     "resolve": "1.10.0",
     "sass-loader": "7.1.0",
     "semver": "6.0.0",
@@ -159,18 +163,24 @@
   },
   "devDependencies": {
     "electron": "5.0.6",
-    "electron-builder": "^20.44.4"
+    "electron-builder": "^20.44.4",
+    "electron-packager": "^14.0.1"
   },
   "build": {
     "appId": "com.hue-controller",
     "compression": "normal",
     "productName": "Hue Controller",
+    "icon": "icons/hc.png",
     "files": [
       "build",
       "Methods",
       "electron"
-    ]
+    ],
+    "win": {
+      "icon": "icons/hc.png"
+    }
   },
   "description": "Control your Philips Hue lights",
-  "author": "Marc Dwyer"
+  "author": "Marc Dwyer",
+  "icon": "icons/hc.png"
 }

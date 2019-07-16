@@ -1,4 +1,4 @@
-import React, { Component, RefObject } from 'react'
+import React, { Component } from 'react'
 import { debounce } from 'lodash'
 import { LightType } from '../Main/main'
 import Switch from '@material-ui/core/Switch';
@@ -10,7 +10,7 @@ interface Props {
     light: LightType;
     setLight: Function;
     selectedLight: number;
-    sendChangeToNode: Function;
+    alterLight: Function;
 }
 interface State {
     range: number;
@@ -25,7 +25,7 @@ class Light extends Component<Props, State> {
         }
     }
     sendBright = (id: number, brightness: number) => {
-          this.props.sendChangeToNode(id, brightness,"brightness-change")
+        this.props.alterLight(id, brightness, "brightness")
     }
     getStyles = (): Object => {
         const { light } = this.props
@@ -63,7 +63,7 @@ class Light extends Component<Props, State> {
             >
                 <Switch
                     checked={light.state.on}
-                    onChange={() => this.props.sendChangeToNode(light.id, light.state.on, "power-change")}
+                    onChange={() => this.props.alterLight(light.id, !light.state.on, "power")}
                     value="checkedA"
                     color="primary"
                     inputProps={{ 'aria-label': 'secondary checkbox' }}
@@ -84,8 +84,9 @@ class Light extends Component<Props, State> {
                         value={this.state.range}
                         onChange={(e) => {
                             const bright = parseInt(e.target.value)
-                            this.setState({ range: bright })
-                            this.sendBright(light.id, this.state.range)
+                            this.setState({ range: bright }, () => {
+                                this.sendBright(light.id, this.state.range)
+                            })
                         }}
                     />
                 </div>

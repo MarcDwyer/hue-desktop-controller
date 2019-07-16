@@ -3,29 +3,31 @@ import { LightParent, ColorPayload, LightType } from '../Main/main'
 import { SketchPicker, RGBColor } from 'react-color';
 import { debounce } from 'lodash'
 import { createPortal } from 'react-dom'
-
-
+import { Spring } from 'react-spring/renderprops'
 import './config.scss'
 
 interface Props {
     selectedLight: number | null;
     lights: LightParent;
     setLight: Function;
-    sendChangeToNode: Function;
+    alterLight: Function;
 }
 export interface ColorPayload {
     hex: string;
     newrgb?: number[];
     rgb: RGBColor;
 }
+type State = {
+    range: number;
+}
 
-class ColorPicker extends Component<Props, {}>{
+class ColorPicker extends Component<Props, State>{
     private light: LightType | null;
     constructor(props: Props) {
         super(props)
         const { lights, selectedLight } = this.props
         this.sendColor = debounce(this.sendColor, 750)
-        this.light = selectedLight ? lights[selectedLight] : null
+        this.light = lights[selectedLight]
         this.state = {
             range: this.light ? this.light.state.bri : 0
         }
@@ -39,28 +41,29 @@ class ColorPicker extends Component<Props, {}>{
         }
     }
     sendColor = (id: number, rgb: RGBColor) => {
-        this.props.sendChangeToNode(id, [rgb.r, rgb.g, rgb.b], "color-change")
+        this.props.alterLight(id, [rgb.r, rgb.g, rgb.b], "color")
     }
     render() {
-        const { setLight } = this.props
-        if (this.light && !this.light.rgb) return null
+        const { rgb } = this.light
         return createPortal(
             <div
                 className="config-parent"
                 onClick={(e) => {
                     //@ts-ignore
                     if (e.target.className !== "config-parent") return
-                    setLight(null)
+                    this.props.setLight(null)
 
                 }}
             >
-                <div className="configuration">
-                    {this.light && this.light.rgb && (() => {
-                        const { rgb } = this.light
+                <Spring
+                    to={{ opacity: 1, transform: "translateY(0%" }}
+                    from={{ opacity: 0, transform: "translateY(-50%)" }}
+                >
+                    {(props) => {
                         return (
-                            (
+                            <div className="configuration" style={{ ...props }}>
                                 <SketchPicker
-                                    width="50%"
+                                    width="350px"
                                     color={{
                                         r: rgb[0],
                                         g: rgb[1],
@@ -71,10 +74,10 @@ class ColorPicker extends Component<Props, {}>{
                                         this.sendColor(this.light.id, color.rgb)
                                     }}
                                 />
-                            )
+                            </div>
                         )
-                    })()}
-                </div>
+                    }}
+                </Spring>
             </div>,
             document.querySelector('#root')
         )

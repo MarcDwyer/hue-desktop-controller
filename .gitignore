@@ -25,3 +25,5 @@ yarn-error.log*
 dist
 release
 config
+windows
+packaged-types
