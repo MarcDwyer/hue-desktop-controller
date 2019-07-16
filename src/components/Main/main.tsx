@@ -118,7 +118,6 @@ class Main extends Component<{}, State> {
         this.setState({ selectedLight: key })
     }
     alterLight = async (id: number, data: any, method: string) => {
-        console.log({id, data, method})
         const { hueBridge } = this.state
         let state = hue.lightState.create();
         let isSet = true;
@@ -181,7 +180,6 @@ class Main extends Component<{}, State> {
                 obj[item.id] = item
                 return obj
             }, {})
-            console.log(lightData)
             this.setState({ lights: lightData })
         } catch (err) {
             console.log(err)

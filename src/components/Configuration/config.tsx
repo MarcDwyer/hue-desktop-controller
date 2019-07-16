@@ -70,7 +70,6 @@ class ColorPicker extends Component<Props, State>{
                                         b: rgb[2]
                                     }}
                                     onChangeComplete={(color) => {
-                                        if (!this.light) return
                                         this.sendColor(this.light.id, color.rgb)
                                     }}
                                 />
