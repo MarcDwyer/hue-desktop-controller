@@ -1,28 +1,53 @@
 .create-div {
-    color: #eee;
+    color: rgba(255,255,255,.95);
     margin: auto;
     display: flex;
     flex-direction: column;
-    
-    h2 {
+    background-color: #2B2C2D;
+    padding: 25px 25px;
+    border-radius: 10px;
+    width: 50%;
+    min-height: 250px;
+    text-align:center;
+    box-shadow: 5px;
+    border: 1px solid #eee;
+
+    .inner-content {
+        display: flex;
         margin: auto;
-        text-transform: capitalize;
+        flex-direction: column;
+
+        img {
+            width: 125px;
+            height: 125px;
+            margin: auto;
+            border-radius: 10px;
+        }
+        
+        button {
+            margin: 25px auto auto auto;
+            outline: none;
+            border: none;
+            padding: 15px 15px;
+            background-color: #303133;
+            color: #eee;
+            cursor: pointer;
+            font-size: 18px;
+            border: solid 1px #eee;
+    
+            &:hover {
+                opacity: .85;
+            }
+        }
     }
 
-    button {
-        margin: 25px auto auto auto;
-        width: 125px;
-        height: 65px;
-        outline: none;
+    @media (max-width: 1250px) {
+        width:  65%;
+    }
+    @media (max-width: 850px) {
+        width: 90%;
+        margin: auto;
         border: none;
-        padding: 15px 15px;
-        background-color: #66B266;
-        color: white;
-        cursor: pointer;
-        font-size: 18px;
-
-        &:hover {
-            opacity: .85;
-        }
+        border-radius: 0;
     }
 }

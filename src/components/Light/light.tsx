@@ -70,6 +70,7 @@ class Light extends Component<Props, State> {
                 />
                 <div
                     className='text'
+                    style={light.rgb ? {cursor: 'pointer'} : {}}
                     onClick={() => {
                         setLight(light.id)
                     }}

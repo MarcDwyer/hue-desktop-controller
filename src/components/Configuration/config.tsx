@@ -73,6 +73,10 @@ class ColorPicker extends Component<Props, State>{
                                         this.sendColor(this.light.id, color.rgb)
                                     }}
                                 />
+                                <button 
+                                className="exit"
+                                onClick={() => this.props.setLight(null)}
+                                >EXIT</button>
                             </div>
                         )
                     }}
