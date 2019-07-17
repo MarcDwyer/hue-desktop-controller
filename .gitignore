@@ -26,3 +26,5 @@ dist
 release
 windows
 packaged-types
+
+huecontroller-win32-x64
