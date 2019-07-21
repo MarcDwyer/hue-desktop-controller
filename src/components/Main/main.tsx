@@ -39,7 +39,7 @@ type State = {
     selectedLight: number | null;
     hueBridge: hue.HueApi | null;
     bridgeData: BridgeData | null;
-    error: string | null;
+    error: Error | null;
 }
 export type BridgeData = {
     user: string;
@@ -133,10 +133,10 @@ class Main extends Component<{}, State> {
                 case "power":
                     isSet = await hueBridge.setLightState(id, data ? state.on() : state.off())
             }
-            if (!isSet) throw "Error changing light!"
+            if (!isSet) throw Error("Error changing light!")
             this.updateLight(id, data, method)
         } catch (err) {
-            if (typeof err === 'string') this.setState({ error: err })
+            if (err.message) this.setState({ error: err })
         }
     }
     updateLight = (id: number, data?: any, method?: string) => {
