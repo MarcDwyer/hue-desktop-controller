@@ -139,6 +139,7 @@ class Main extends Component<{}, State> {
             if (err.message) this.setState({ error: err })
         }
     }
+    // updates the light values based on client input
     updateLight = (id: number, data?: any, method?: string) => {
         const shallow: LightParent = this.state.lights
         const updateLight = shallow[id]
@@ -155,6 +156,8 @@ class Main extends Component<{}, State> {
         }
         this.setState({ lights: shallow })
     }
+
+    // set the Hue Bridge Data in State
     setHueBridge = (hueData?: BridgeData) => {
         if (hueData) {
             this.setState({ hueBridge: new hue.HueApi(hueData.host, hueData.user), bridgeData: hueData }, () => this.getLights())
@@ -164,6 +167,7 @@ class Main extends Component<{}, State> {
             this.setState({ hueBridge: new hue.HueApi(bridgeData.host, bridgeData.user) }, () => this.getLights())
         }
     }
+    // Gets all the lights when bridge connection has been established
     getLights = async () => {
         const { hueBridge } = this.state
         try {
