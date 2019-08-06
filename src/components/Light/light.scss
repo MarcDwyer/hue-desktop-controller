@@ -2,7 +2,7 @@
    display: flex;
    flex-direction: column;
    width: 30%;
-   margin: 10px; 
+   margin: 10px;
    height: 95px;
    font-weight: 700;
    margin: 10px auto 10px auto;
@@ -15,51 +15,82 @@
       position: absolute;
       top: 5px;
       right: 5px;
- 
+      z-index: 2;
+
    }
 
    .text {
-      padding: 15px 15px;
+      z-index: 1;
       height: 100%;
+      display: flex;
+
+      .name {
+         z-index: 2;
+         display: flex;
+         flex-wrap: nowrap;
+         margin: auto auto auto 0 !important;
+
+         svg {
+            margin: auto auto auto 10px;
+         }
+         input {
+            padding: 5px;
+            margin: 5px;
+            background: transparent;
+            outline: none;
+            border: none;
+            font-weight: bold;
+            font-size: 18px;
+            font-family: inherit;
+            color: inherit;
+            margin-left: 10px;
+         }
+
+         .activated {
+            border-bottom: 1px solid black;
+         }
+      }
    }
+
    .range-content {
       width: 100%;
       margin: auto 0 0 0;
       display: flex;
-      cursor: pointer;
 
       input {
-          -webkit-appearance: none;
-          width: 100%;
-          background: rgba(238, 238, 238, .55);
-          outline: none;
-          -webkit-transition: .2s;
-          transition: opacity .2s;
-          padding: 0;
-          border: none;
-          margin: 0;
+         -webkit-appearance: none;
+         width: 100%;
+         background: rgba(238, 238, 238, .55);
+         outline: none;
+         -webkit-transition: .2s;
+         transition: opacity .2s;
+         padding: 0;
+         border: none;
+         margin: 0;
 
-          &::-webkit-slider-thumb {
-              -webkit-appearance: none;
-              appearance: none;
-              background: rgba(255, 255, 255, 1);
-              height: 15px;
-              width: 15px;
-          }
+         &::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            background: rgba(255, 255, 255, 1);
+            height: 15px;
+            width: 15px;
+         }
 
-          &::-moz-range-thumb {
-              width: 15px;
-              height: 15px;
-              background: #4CAF50;
-          }
+         &::-moz-range-thumb {
+            width: 15px;
+            height: 15px;
+            background: #4CAF50;
+         }
       }
-  }
-  @media(max-width: 1250px) {
-     width: 45%;
-  }
-  @media(max-width: 850px) {
-   width: 95%;
-}
+   }
+
+   @media(max-width: 1250px) {
+      width: 45%;
+   }
+
+   @media(max-width: 850px) {
+      width: 95%;
+   }
 }
 
 

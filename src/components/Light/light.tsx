@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { debounce } from 'lodash'
 import { LightType } from '../Main/main'
+import { MdModeEdit } from 'react-icons/md'
 import Switch from '@material-ui/core/Switch';
 
 import './light.scss'
@@ -14,6 +15,8 @@ interface Props {
 }
 interface State {
     range: number;
+    disabled: boolean;
+    newName: string;
 }
 class Light extends Component<Props, State> {
     constructor(props) {
@@ -21,7 +24,9 @@ class Light extends Component<Props, State> {
         const { light } = this.props
         this.sendBright = debounce(this.sendBright, 450)
         this.state = {
-            range: light.state.bri
+            range: light.state.bri,
+            disabled: true,
+            newName: this.props.light.name
         }
     }
     sendBright = (id: number, brightness: number) => {
@@ -55,7 +60,7 @@ class Light extends Component<Props, State> {
     }
     render() {
         const { light, setLight } = this.props
-        // this.props.sendPowerChangetoHub(light.id)
+        const { disabled, newName } = this.state
         return (
             <div
                 className="light-parent"
@@ -70,12 +75,38 @@ class Light extends Component<Props, State> {
                 />
                 <div
                     className='text'
-                    style={light.rgb ? {cursor: 'pointer'} : {}}
+                    style={light.rgb ? { cursor: 'pointer' } : {}}
                     onClick={() => {
                         setLight(light.id)
                     }}
                 >
-                    <span>{light.name}, {light.id}</span>
+                    <div className="name"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <MdModeEdit
+                            size="24px"
+                            onClick={(e) => {
+                                if (newName !== this.props.light.name) {
+                                    console.log('thsi ran...')
+                                    this.props.alterLight(light.id, newName, "newName")
+                                }
+                                this.setState({ disabled: !disabled })
+                            }}
+                        />
+                        <form onSubmit={(e) => {
+                            e.preventDefault()
+                            this.setState({ disabled: true }, () => this.props.alterLight(light.id, newName, "newName"))
+                        }}>
+                            <input
+                                value={newName}
+                                type="text"
+                                size={newName.length - 1}
+                                disabled={disabled}
+                                className={!disabled ? "activated" : ""}
+                                onChange={(e) => this.setState({ newName: e.target.value })}
+                            />
+                        </form>
+                    </div>
                 </div>
                 <div className="range-content">
                     <input

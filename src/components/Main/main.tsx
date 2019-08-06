@@ -132,6 +132,8 @@ class Main extends Component<{}, State> {
                     break;
                 case "power":
                     isSet = await hueBridge.setLightState(id, data ? state.on() : state.off())
+                case "newName":
+                    isSet = await hueBridge.setLightName(id, data)
             }
             if (!isSet) throw Error("Error changing light!")
             this.updateLight(id, data, method)
