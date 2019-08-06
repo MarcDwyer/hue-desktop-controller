@@ -58,12 +58,24 @@ class Light extends Component<Props, State> {
         }
         return count >= 2 ? true : false
     }
+    submitName = () => {
+        const { light, alterLight } = this.props
+        if (light.name === this.state.newName) {
+            this.setState({ disabled: true })
+            return
+        }
+        this.setState({ disabled: true }, () => alterLight(light.id, this.state.newName, "newName"))
+    }
+    trimName(name: string): string {
+        return name.replace(/\s/g, "")
+    }
     render() {
         const { light, setLight } = this.props
         const { disabled, newName } = this.state
+
         return (
             <div
-                className="light-parent"
+                className={`light-parent ${this.trimName(light.name)}`}
                 style={this.getStyles()}
             >
                 <Switch
@@ -76,36 +88,44 @@ class Light extends Component<Props, State> {
                 <div
                     className='text'
                     style={light.rgb ? { cursor: 'pointer' } : {}}
-                    onClick={() => {
+                    onClick={(e: any): void => {
                         setLight(light.id)
                     }}
                 >
-                    <div className="name"
-                        onClick={(e) => e.stopPropagation()}
+                    <div className={`hideme ${!disabled ? 'disabled' : ''}`}
+                    onClick={(e) => {
+                        e.stopPropagation()
+                        this.submitName()
+                    }}
+                    ></div>
+                    <div className={`name ${!disabled ? 'activated-div' : ''}`}
                     >
-                        <MdModeEdit
-                            size="24px"
-                            onClick={(e) => {
-                                if (newName !== this.props.light.name) {
-                                    console.log('thsi ran...')
-                                    this.props.alterLight(light.id, newName, "newName")
-                                }
-                                this.setState({ disabled: !disabled })
-                            }}
-                        />
-                        <form onSubmit={(e) => {
-                            e.preventDefault()
-                            this.setState({ disabled: true }, () => this.props.alterLight(light.id, newName, "newName"))
-                        }}>
-                            <input
-                                value={newName}
-                                type="text"
-                                size={newName.length - 1}
-                                disabled={disabled}
-                                className={!disabled ? "activated" : ""}
-                                onChange={(e) => this.setState({ newName: e.target.value })}
+                            <MdModeEdit
+                                size="24px"
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    if (!disabled) {
+                                        this.submitName()
+                                        return
+                                    }
+                                    this.setState({ disabled: !disabled })
+
+                                }}
                             />
-                        </form>
+                            <form onSubmit={(e) => {
+                                e.preventDefault()
+                                this.submitName()
+                            }}>
+                                <input
+                                    value={newName}
+                                    type="text"
+                                    size={newName.length}
+                                    disabled={disabled}
+                                    className={!disabled ? "activated-input" : ""}
+                                    onClick={(e) => e.stopPropagation()}
+                                    onChange={(e) => this.setState({ newName: e.target.value })}
+                                />
+                            </form>
                     </div>
                 </div>
                 <div className="range-content">

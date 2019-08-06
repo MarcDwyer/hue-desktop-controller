@@ -15,42 +15,45 @@
       position: absolute;
       top: 5px;
       right: 5px;
-      z-index: 2;
 
    }
 
    .text {
-      z-index: 1;
       height: 100%;
       display: flex;
 
+      .hideme {
+         display: hidden;
+      }
       .name {
-         z-index: 2;
          display: flex;
          flex-wrap: nowrap;
          margin: auto auto auto 0 !important;
 
-         svg {
-            margin: auto auto auto 10px;
-         }
-         input {
-            padding: 5px;
-            margin: 5px;
-            background: transparent;
-            outline: none;
-            border: none;
-            font-weight: bold;
-            font-size: 18px;
-            font-family: inherit;
-            color: inherit;
-            margin-left: 10px;
-         }
+            svg {
+               margin: auto auto auto 10px;
+            }
 
-         .activated {
-            border-bottom: 1px solid black;
+            input {
+               padding: 5px;
+               margin: 5px;
+               background: transparent;
+               outline: none;
+               border: none;
+               font-weight: bold;
+               font-size: 18px;
+               font-family: inherit;
+               color: inherit;
+               margin-left: 10px;
+            }
+
+            .activated-input {
+               border-radius: 5px;
+               background-color: rgba(0, 0, 0, .15);
+               color: #eee;
+            }
          }
       }
-   }
 
    .range-content {
       width: 100%;
@@ -72,13 +75,13 @@
             -webkit-appearance: none;
             appearance: none;
             background: rgba(255, 255, 255, 1);
-            height: 15px;
-            width: 15px;
+            height: 20px;
+            width: 20px;
          }
 
          &::-moz-range-thumb {
-            width: 15px;
-            height: 15px;
+            width: 20px;
+            height: 20px;
             background: #4CAF50;
          }
       }
@@ -93,6 +96,9 @@
    }
 }
 
+.activated-div {
+   z-index: 2001 !important;
+}
 
 .off {
    background-color: #303133;
@@ -101,4 +107,14 @@
 
 .on {
    background-color: #BEBEBE;
+}
+
+.disabled {
+   position: fixed;
+   top: 0;
+   left: 0;
+   height: 100vh;
+   width: 100vw;
+   background-color: transparent;
+   z-index: 2000 !important;
 }

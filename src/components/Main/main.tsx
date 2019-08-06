@@ -119,6 +119,7 @@ class Main extends Component<{}, State> {
     }
     alterLight = async (id: number, data: any, method: string) => {
         const { hueBridge } = this.state
+        console.log({id, data, method})
         let state = hue.lightState.create();
         let isSet = true;
         try {
@@ -132,6 +133,7 @@ class Main extends Component<{}, State> {
                     break;
                 case "power":
                     isSet = await hueBridge.setLightState(id, data ? state.on() : state.off())
+                    break;
                 case "newName":
                     isSet = await hueBridge.setLightName(id, data)
             }
