@@ -155,6 +155,9 @@ class Main extends Component<{}, State> {
             case "power":
                 if (updateLight.state.on === data) return
                 updateLight.state.on = data
+                break;
+            case "newName":
+                updateLight.name = data
         }
         this.setState({ lights: shallow })
     }
