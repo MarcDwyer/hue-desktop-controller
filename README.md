@@ -4,3 +4,12 @@
 ## Hue Controller App
 
 Control the lights connected to your Philips Hue Bridge. 
+
+## How to Use
+- npm i
+- npm run build
+- install app in dist folder
+
+Or for developement
+- npm i
+- npm start
