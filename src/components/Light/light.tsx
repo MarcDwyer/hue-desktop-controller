@@ -66,16 +66,13 @@ class Light extends Component<Props, State> {
         }
         this.setState({ disabled: true }, () => alterLight(light.id, this.state.newName, "newName"))
     }
-    trimName(name: string): string {
-        return name.replace(/\s/g, "")
-    }
     render() {
         const { light, setLight } = this.props
         const { disabled, newName } = this.state
 
         return (
             <div
-                className={`light-parent ${this.trimName(light.name)}`}
+                className='light-parent'
                 style={this.getStyles()}
             >
                 <Switch
