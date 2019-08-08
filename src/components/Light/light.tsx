@@ -89,40 +89,42 @@ class Light extends Component<Props, State> {
                         setLight(light.id)
                     }}
                 >
-                    <div className={`hideme ${!disabled ? 'disabled' : ''}`}
-                    onClick={(e) => {
-                        e.stopPropagation()
-                        this.submitName()
-                    }}
-                    ></div>
+                    {!disabled && (
+                        <div className={`hideme ${!disabled ? 'disabled' : ''}`}
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                this.submitName()
+                            }}
+                        ></div>
+                    )}
                     <div className={`name ${!disabled ? 'activated-div' : ''}`}
                     >
-                            <MdModeEdit
-                                size="24px"
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    if (!disabled) {
-                                        this.submitName()
-                                        return
-                                    }
-                                    this.setState({ disabled: !disabled })
+                        <MdModeEdit
+                            size="24px"
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                if (!disabled) {
+                                    this.submitName()
+                                    return
+                                }
+                                this.setState({ disabled: !disabled })
 
-                                }}
+                            }}
+                        />
+                        <form onSubmit={(e) => {
+                            e.preventDefault()
+                            this.submitName()
+                        }}>
+                            <input
+                                value={newName}
+                                type="text"
+                                size={newName.length}
+                                disabled={disabled}
+                                className={!disabled ? "activated-input" : ""}
+                                onClick={(e) => e.stopPropagation()}
+                                onChange={(e) => this.setState({ newName: e.target.value })}
                             />
-                            <form onSubmit={(e) => {
-                                e.preventDefault()
-                                this.submitName()
-                            }}>
-                                <input
-                                    value={newName}
-                                    type="text"
-                                    size={newName.length}
-                                    disabled={disabled}
-                                    className={!disabled ? "activated-input" : ""}
-                                    onClick={(e) => e.stopPropagation()}
-                                    onChange={(e) => this.setState({ newName: e.target.value })}
-                                />
-                            </form>
+                        </form>
                     </div>
                 </div>
                 <div className="range-content">
