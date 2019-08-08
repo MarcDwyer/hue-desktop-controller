@@ -56,7 +56,7 @@ class Light extends Component<Props, State> {
         for (let x = 0; x < rgb.length; x++) {
             if (rgb[x] > 165) count++
         }
-        return count >= 2 ? true : false
+        return count >= 2
     }
     submitName = () => {
         const { light, alterLight } = this.props
