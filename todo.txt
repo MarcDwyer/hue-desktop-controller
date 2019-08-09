@@ -1,0 +1,2 @@
++ Add search for new lights functionality
++ Make a webapge for hue controller

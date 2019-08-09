@@ -119,9 +119,10 @@ class Main extends Component<{}, State> {
     }
     alterLight = async (id: number, data: any, method: string) => {
         const { hueBridge } = this.state
-        console.log({id, data, method})
-        let state = hue.lightState.create();
-        let isSet = true;
+        let 
+        state = hue.lightState.create(), 
+        isSet;
+
         try {
             switch (method) {
                 case "color":
