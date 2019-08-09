@@ -27,4 +27,6 @@ release
 windows
 packaged-types
 
+.-electron-win32-x64
+
 huecontroller-win32-x64
