@@ -21,7 +21,6 @@
   },
   "include": [
     "src",
-    "electron", 
-    "src/Methods"
+    "electron"
   ]
 }

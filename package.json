@@ -175,7 +175,6 @@
     "icon": "icons/hc.png",
     "files": [
       "build",
-      "Methods",
       "electron"
     ],
     "win": {
