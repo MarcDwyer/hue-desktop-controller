@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { BridgeData } from '../Main/main'
 import { nupnpSearch } from 'node-hue-api'
 import { HueApi } from 'node-hue-api'
 import { BeatLoader } from 'react-spinners'
 import { css } from '@emotion/core';
 import { useSpring, animated } from 'react-spring'
+
 import './create.scss'
 
 import HueImage from  '../../images/bridge-button.png'
@@ -15,7 +16,7 @@ interface Props {
 }
 
 const CreateUser = (props: Props) => {
-    const [msg, setMsg] = useState<string>("Press the Link button on your hue bridge then click connect")
+    const newMsg = useRef<string>("Press the Link button on your hue bridge then click connect")
     const [status, setStatus] = useState<boolean>(false)
     const api = new HueApi()
 
@@ -30,7 +31,7 @@ const CreateUser = (props: Props) => {
     return (
         <animated.div className="create-div" style={createDiv}>
             <div className="inner-content">
-                <h2 className="set-bridge-message">{msg}</h2>
+                <h2 className="set-bridge-message">{newMsg && newMsg.current && (newMsg.current)}</h2>
                 <img 
                 src={HueImage}
                 alt="bridge"
@@ -54,7 +55,7 @@ const CreateUser = (props: Props) => {
                                         props.setHueBridge(bData)
                                     } catch (err) {
                                         setStatus(false)
-                                        setMsg('Link button not pressed! Try again')
+                                        newMsg.current = 'Link button not pressed! Try again'
                                     }
                                 }}
                         >

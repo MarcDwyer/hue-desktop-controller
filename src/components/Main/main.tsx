@@ -61,6 +61,7 @@ export type ErrorMessage = {
 class Main extends Component<{}, State> {
     constructor(props) {
         super(props);
+        console.log(props)
         const bridgeData = localStorage.getItem("bridgeData") ? JSON.parse(localStorage.getItem("bridgeData")) : null
         this.state = {
             lights: null,
