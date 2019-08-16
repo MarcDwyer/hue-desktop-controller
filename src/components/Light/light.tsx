@@ -20,15 +20,15 @@ interface State {
 }
 
 
-function useDebounce(value, delay) {
+function useDebounce(func, delay) {
     // State and setters for debounced value
-    const [debouncedValue, setDebouncedValue] = useState(value);
-
+    const [debouncedValue, setDebouncedValue] = useState(func);
+    const args = arguments
     useEffect(
         () => {
             // Update debounced value after delay
             const handler = setTimeout(() => {
-                setDebouncedValue(value);
+                setDebouncedValue(func);
             }, delay);
 
             // Cancel the timeout if value changes (also on delay change or unmount)
@@ -38,7 +38,7 @@ function useDebounce(value, delay) {
                 clearTimeout(handler);
             };
         },
-        [value, delay] // Only re-call effect if value or delay changes
+        [func, delay] // Only re-call effect if value or delay changes
     );
 
     return debouncedValue;
