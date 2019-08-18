@@ -34,13 +34,6 @@ export interface BrightnessPayload {
     bright: number;
     id: number;
 }
-type State = {
-    lights: LightParent | null;
-    selectedLight: number | null;
-    hueBridge: hue.HueApi | null;
-    bridgeData: BridgeData | null;
-    error: Error | null;
-}
 export type BridgeData = {
     user: string;
     host: string;
@@ -57,6 +50,13 @@ export interface HSL {
 export type ErrorMessage = {
     message: string;
     type: number;
+}
+type State = {
+    lights: LightParent | null;
+    selectedLight: number | null;
+    hueBridge: hue.HueApi | null;
+    bridgeData: BridgeData | null;
+    error: Error | null;
 }
 class Main extends Component<{}, State> {
     constructor(props) {
@@ -93,9 +93,9 @@ class Main extends Component<{}, State> {
                                 {Object.values(lights).map(i => {
                                     return (
                                         <Light
+                                            key={i.id}
                                             light={i}
                                             setLight={this.setSelectedLight}
-                                            selectedLight={selectedLight} key={i.name}
                                             alterLight={this.alterLight}
                                         />
                                     )

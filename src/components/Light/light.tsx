@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { debounce } from 'lodash'
-import { LightType } from '../Main/main'
+import { LightType, LightParent } from '../Main/main'
 import { MdModeEdit } from 'react-icons/md'
 import Switch from '@material-ui/core/Switch';
 
@@ -10,7 +10,6 @@ import './light.scss'
 interface Props {
     light: LightType;
     setLight: Function;
-    selectedLight: number;
     alterLight: Function;
 }
 interface State {
@@ -20,32 +19,7 @@ interface State {
 }
 
 
-function useDebounce(func, delay) {
-    // State and setters for debounced value
-    const [debouncedValue, setDebouncedValue] = useState(func);
-    const args = arguments
-    useEffect(
-        () => {
-            // Update debounced value after delay
-            const handler = setTimeout(() => {
-                setDebouncedValue(func);
-            }, delay);
-
-            // Cancel the timeout if value changes (also on delay change or unmount)
-            // This is how we prevent debounced value from updating if value is changed ...
-            // .. within the delay period. Timeout gets cleared and restarted.
-            return () => {
-                clearTimeout(handler);
-            };
-        },
-        [func, delay] // Only re-call effect if value or delay changes
-    );
-
-    return debouncedValue;
-}
-
-
-class Light extends React.PureComponent<Props, State> {
+class Light extends React.Component<Props, State> {
     constructor(props) {
         super(props);
         const { light } = this.props
@@ -96,7 +70,6 @@ class Light extends React.PureComponent<Props, State> {
     render() {
         const { light, setLight } = this.props
         const { disabled, newName } = this.state
-
         return (
             <div
                 className='light-parent'
