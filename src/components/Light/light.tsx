@@ -21,7 +21,7 @@ const checkRgb = (rgb: number[]): boolean => {
 
 const useStyles = (light: LightType): Object[] => {
     const [style, setStyle] = useState<Object>({})
-    let strRgb = light.rgb ? JSON.stringify(light.rgb) : null
+    let strRgb = light['rgb'] ? JSON.stringify(light.rgb) : null
     useEffect(() => {
         let styles: Object = {}
         if (light.rgb) {
@@ -46,8 +46,8 @@ const Light = (props: Props) => {
     const [disabled, setDisabled] = useState<boolean>(true)
     const [name, setName] = useState<string>(light.name)
 
-    const [sendBright] = useDebouncedCallback((id: number, brightness: number) => {
-        props.alterLight(id, brightness, "brightness")
+    const [sendBright] = useDebouncedCallback(() => {
+        props.alterLight(light.id, range, "brightness")
     }, 450)
 
     const [submitName] = useDebouncedCallback(() => {
@@ -57,13 +57,9 @@ const Light = (props: Props) => {
 
     const [styleObj] = useStyles(light)
 
-    useEffect(() => {
-        sendBright(light.id, range)
-    }, [range])
+    useEffect(sendBright, [range])
 
-    useEffect(() => {
-        submitName()
-    }, [name])
+    useEffect(submitName, [name])
     return (
         <div
             className='light-parent'
