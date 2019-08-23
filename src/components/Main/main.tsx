@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import { xyBriToRgb, RGBtoXY } from '../../Methods/methods'
 import Light from '../Light/light'
 import CreateUser from '../Create-User/create'
@@ -47,82 +47,39 @@ export interface HSL {
     s: number;
     l: number;
 }
-export type ErrorMessage = {
-    message: string;
-    type: number;
-}
-type State = {
-    lights: LightParent | null;
-    selectedLight: number | null;
-    hueBridge: hue.HueApi | null;
-    bridgeData: BridgeData | null;
-    error: Error | null;
-}
-class Main extends Component<{}, State> {
-    constructor(props) {
-        super(props);
-        console.log(props)
-        const bridgeData = localStorage.getItem("bridgeData") ? JSON.parse(localStorage.getItem("bridgeData")) : null
-        this.state = {
-            lights: null,
-            bridgeData,
-            selectedLight: null,
-            hueBridge: null,
-            error: null
+
+const Main: React.FC = () => {
+    const [bridgeData, setbridgeData] = useState<BridgeData | null>(JSON.parse(localStorage.getItem("bridgeData")))
+    const [selected, setSelected] = useState<number | null>(null)
+    const [hueBridge, setHueBridge] = useState<hue.HueApi | null>(null)
+    const [lights, setLights] = useState<LightParent | null>(null)
+
+
+    const updateLight = (id: number, data?: any, method?: string) => {
+        const shallow: LightParent = {...lights}
+        const updateLight = shallow[id]
+        switch (method) {
+            case "color":
+                updateLight.rgb = data
+                break;
+            case "brightness":
+                updateLight.state.bri = data
+                break;
+            case "power":
+                if (updateLight.state.on === data) return
+                updateLight.state.on = data
+                break;
+            case "newName":
+                updateLight.name = data
         }
+        setLights(shallow)
     }
-    componentDidMount() {
-        if (this.state.bridgeData) {
-            this.setHueBridge()
-        }
-    }
-    render() {
-        const { lights, selectedLight } = this.state
-        return (
-            <div className="main container" >
-                {!this.state.bridgeData && (
-                    <CreateUser
-                        bridge={this.state.bridgeData}
-                        setHueBridge={this.setHueBridge}
-                    />
-                )}
-                {lights && (
-                    <div className="authenticated">
-                        <div className="light-grid">
-                            <div className="subdiv">
-                                {Object.values(lights).map(i => {
-                                    return (
-                                        <Light
-                                            key={i.id}
-                                            light={i}
-                                            setLight={this.setSelectedLight}
-                                            alterLight={this.alterLight}
-                                        />
-                                    )
-                                })}
-                            </div>
-                        </div>
-                    </div>
-                )}
-                {lights && selectedLight && lights[selectedLight] && lights[selectedLight].rgb && (
-                    <ColorPicker
-                        selectedLight={this.state.selectedLight}
-                        lights={this.state.lights}
-                        setLight={this.setSelectedLight}
-                        alterLight={this.alterLight}
-                    />
-                )}
-            </div >
-        )
-    }
-    setSelectedLight = (key: number | null) => {
-        this.setState({ selectedLight: key })
-    }
-    alterLight = async (id: number, data: any, method: string) => {
-        const { hueBridge } = this.state
-        let 
-        state = hue.lightState.create(), 
-        isSet;
+
+
+    const alterLight = async (id: number, data: any, method: string) => {
+        let
+            state = hue.lightState.create(),
+            isSet;
 
         try {
             switch (method) {
@@ -140,45 +97,14 @@ class Main extends Component<{}, State> {
                     isSet = await hueBridge.setLightName(id, data)
             }
             if (!isSet) throw Error("Error changing light!")
-            this.updateLight(id, data, method)
+            updateLight(id, data, method)
         } catch (err) {
-            if (err.message) this.setState({ error: err })
+            console.log(err)
         }
-    }
-    // updates the light values based on client input
-    updateLight = (id: number, data?: any, method?: string) => {
-        const shallow: LightParent = this.state.lights
-        const updateLight = shallow[id]
-        switch (method) {
-            case "color":
-                updateLight.rgb = data
-                break;
-            case "brightness":
-                updateLight.state.bri = data
-                break;
-            case "power":
-                if (updateLight.state.on === data) return
-                updateLight.state.on = data
-                break;
-            case "newName":
-                updateLight.name = data
-        }
-        this.setState({ lights: shallow })
     }
 
-    // set the Hue Bridge Data in State
-    setHueBridge = (hueData?: BridgeData) => {
-        if (hueData) {
-            this.setState({ hueBridge: new hue.HueApi(hueData.host, hueData.user), bridgeData: hueData }, () => this.getLights())
-            return
-        } else if (this.state.bridgeData) {
-            const { bridgeData } = this.state
-            this.setState({ hueBridge: new hue.HueApi(bridgeData.host, bridgeData.user) }, () => this.getLights())
-        }
-    }
     // Gets all the lights when bridge connection has been established
-    getLights = async () => {
-        const { hueBridge } = this.state
+    const getLights = async () => {
         try {
             const { lights } = await hueBridge.lights()
             const lightData = lights.map(light => {
@@ -193,11 +119,65 @@ class Main extends Component<{}, State> {
                 obj[item.id] = item
                 return obj
             }, {})
-            this.setState({ lights: lightData })
+            setLights(lightData)
         } catch (err) {
             console.log(err)
         }
     }
+
+    useEffect(() => {
+        if (bridgeData) {
+            setHueBridge(new hue.HueApi(bridgeData.host, bridgeData.user))
+        }
+    }, [])
+
+    useEffect(() => {
+        if (bridgeData && !hueBridge) {
+            setHueBridge(new hue.HueApi(bridgeData.host, bridgeData.user))
+        }
+    }, [bridgeData])
+
+    useEffect(() => {
+        if (!lights && hueBridge) {
+            getLights()
+        }
+    }, [hueBridge])
+
+    return (
+        <div className="main container" >
+            {!bridgeData && (
+                <CreateUser
+                    setbridgeData={setbridgeData}
+                />
+            )}
+            {lights && (
+                <div className="authenticated">
+                    <div className="light-grid">
+                        <div className="subdiv">
+                            {Object.values(lights).map(i => {
+                                return (
+                                    <Light
+                                        key={i.id}
+                                        light={i}
+                                        setLight={setSelected}
+                                        alterLight={alterLight}
+                                    />
+                                )
+                            })}
+                        </div>
+                    </div>
+                </div>
+            )}
+            {lights && selected && lights[selected] && lights[selected].rgb && (
+                <ColorPicker
+                    selectedLight={selected}
+                    lights={lights}
+                    setLight={setSelected}
+                    alterLight={alterLight}
+                />
+            )}
+        </div >
+    )
 }
 
 export default Main

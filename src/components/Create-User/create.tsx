@@ -1,18 +1,15 @@
 import React, { useState, useRef } from 'react'
-import { BridgeData } from '../Main/main'
-import { nupnpSearch } from 'node-hue-api'
-import { HueApi } from 'node-hue-api'
+import { nupnpSearch, HueApi } from 'node-hue-api'
 import { BeatLoader } from 'react-spinners'
 import { css } from '@emotion/core';
 import { useSpring, animated } from 'react-spring'
 
 import './create.scss'
 
-import HueImage from  '../../images/bridge-button.png'
+import HueImage from '../../images/bridge-button.png'
 
 interface Props {
-    bridge: BridgeData;
-    setHueBridge: Function;
+    setbridgeData: Function;
 }
 
 const CreateUser = (props: Props) => {
@@ -32,9 +29,9 @@ const CreateUser = (props: Props) => {
         <animated.div className="create-div" style={createDiv}>
             <div className="inner-content">
                 <h2 className="set-bridge-message">{newMsg && newMsg.current && (newMsg.current)}</h2>
-                <img 
-                src={HueImage}
-                alt="bridge"
+                <img
+                    src={HueImage}
+                    alt="bridge"
                 />
                 {status ? (
                     <BeatLoader
@@ -52,7 +49,7 @@ const CreateUser = (props: Props) => {
                                         const user = await api.registerUser(bridgeData.ipaddress, 'hue-controller2')
                                         const bData = { user, host: bridgeData.ipaddress }
                                         localStorage.setItem("bridgeData", JSON.stringify(bData))
-                                        props.setHueBridge(bData)
+                                        props.setbridgeData(bData)
                                     } catch (err) {
                                         setStatus(false)
                                         newMsg.current = 'Link button not pressed! Try again'

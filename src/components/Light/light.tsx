@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
-import { LightType } from '../Main/main'
+import { LightType, LightParent } from '../Main/main'
 import { MdModeEdit } from 'react-icons/md'
 import Switch from '@material-ui/core/Switch';
 
@@ -45,21 +45,30 @@ const Light = (props: Props) => {
     const [range, setRange] = useState<number>(light.state.bri)
     const [disabled, setDisabled] = useState<boolean>(true)
     const [name, setName] = useState<string>(light.name)
-
+    console.log('render')
     const [sendBright] = useDebouncedCallback(() => {
         props.alterLight(light.id, range, "brightness")
     }, 450)
 
     const [submitName] = useDebouncedCallback(() => {
-        if (light.name === name) return
         props.alterLight(light.id, name, "newName")
     }, 450)
 
     const [styleObj] = useStyles(light)
 
-    useEffect(sendBright, [range])
+    useEffect(() => {
+        if (range !== light.state.bri) {
+            sendBright()
+        }
+    }, [range])
 
-    useEffect(submitName, [name])
+    useEffect(() => {
+        if (name !== light.name) {
+            submitName()
+        }
+    }, [name])
+
+    console.log('light render')
     return (
         <div
             className='light-parent'
