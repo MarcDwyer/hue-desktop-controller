@@ -5,7 +5,7 @@
 Control your Philips Hue lights with Hue Controller. A free and open source electron app!
 
 ## Install
-[Windows Installer](https://github.com/MarcDwyer/electron-hue-controller/releases/download/1.1.1/Hue.Controller.Setup.1.2.exe)
+[Windows Installer](https://github.com/MarcDwyer/electron-hue-controller/releases/download/1.2/Hue.Controller.Setup.1.2.exe)
 
 ## Contributing
 Contributions, bug feedback, and feature requests are all welcome.
