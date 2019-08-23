@@ -126,12 +126,6 @@ const Main: React.FC = () => {
     }
 
     useEffect(() => {
-        if (bridgeData) {
-            setHueBridge(new hue.HueApi(bridgeData.host, bridgeData.user))
-        }
-    }, [])
-
-    useEffect(() => {
         if (bridgeData && !hueBridge) {
             setHueBridge(new hue.HueApi(bridgeData.host, bridgeData.user))
         }
