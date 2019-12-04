@@ -180,6 +180,9 @@
     ],
     "win": {
       "icon": "icons/hc.png"
+    },
+    "linux": {
+      "icon": "icons/hc.png"
     }
   },
   "description": "Control your Philips Hue lights",
