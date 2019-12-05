@@ -1,6 +1,6 @@
 {
   "name": "huecontroller",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "private": true,
   "main": "electron/main.js",
   "homepage": "./",
@@ -178,13 +178,15 @@
       "electron"
     ],
     "win": {
-      "icon": "icons/hc.png"
+      "icon": "icons/hc.png",
+      "target": "msi"
     },
     "linux": {
-      "icon": "icons/hc.png"
+      "icon": "icons/hc.png",
+      "target": "deb"
     }
   },
   "description": "Control your Philips Hue lights",
-  "author": "Marc Dwyer",
+  "author": "Marc Dwyer <marcdwyer1738@gmail.com>",
   "icon": "icons/hc.png"
 }
