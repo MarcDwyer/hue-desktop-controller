@@ -1,68 +1,49 @@
-import React, { useState, useRef } from 'react'
-import { nupnpSearch, HueApi } from 'node-hue-api'
-import { BeatLoader } from 'react-spinners'
-import { css } from '@emotion/core';
-import { useSpring, animated } from 'react-spring'
+import React, { useState, useRef } from "react";
+import { nupnpSearch, HueApi } from "node-hue-api";
+import { BeatLoader } from "react-spinners";
+import { css } from "@emotion/core";
+import { useSpring, animated } from "react-spring";
+import { useDispatch, useSelector } from "react-redux";
 
-import './create.scss'
+import "./create.scss";
 
-import HueImage from '../../images/bridge-button.png'
+import HueImage from "../../images/bridge-button.png";
+import { ReduxeStore } from "../../reducers";
 
-interface Props {
-    setbridgeData: Function;
-}
+const CreateUser = () => {
+  const newMsg = useRef<string>(
+    "Press the Link button on your hue bridge then click connect"
+  );
+  const [status, setStatus] = useState<boolean>(false);
+  const [hueApi] = useSelector((state: ReduxeStore) => [
+    state.bridgeData.hueApi
+  ]);
+  const dispatch = useDispatch();
+  const loader = css`
+    margin: 25px auto auto auto;
+  `;
 
-const CreateUser = (props: Props) => {
-    const newMsg = useRef<string>("Press the Link button on your hue bridge then click connect")
-    const [status, setStatus] = useState<boolean>(false)
-    const api = new HueApi()
+  const createDiv = useSpring({
+    opacity: 1,
+    from: { opacity: 0 }
+  });
+  return (
+    <animated.div className="create-div" style={createDiv}>
+      <div className="inner-content">
+        <h2 className="set-bridge-message">
+          {newMsg && newMsg.current && newMsg.current}
+        </h2>
+        <img src={HueImage} alt="bridge" />
+        {status ? (
+          <BeatLoader color="#eee" css={loader} />
+        ) : (
+          <button disabled={status} onClick={() => dispatch}>
+            Connect
+          </button>
+        )}
+      </div>
+    </animated.div>
+  );
+};
 
-    const loader = css`
-        margin: 25px auto auto auto;
-    `
-
-    const createDiv = useSpring({
-        opacity: 1,
-        from: { opacity: 0 }
-    })
-    return (
-        <animated.div className="create-div" style={createDiv}>
-            <div className="inner-content">
-                <h2 className="set-bridge-message">{newMsg && newMsg.current && (newMsg.current)}</h2>
-                <img
-                    src={HueImage}
-                    alt="bridge"
-                />
-                {status ? (
-                    <BeatLoader
-                        color="#eee"
-                        css={loader}
-                    />
-                ) : (
-                        <button
-                            disabled={status}
-                            onClick={
-                                async () => {
-                                    setStatus(true)
-                                    try {
-                                        const [bridgeData] = await nupnpSearch()
-                                        const user = await api.registerUser(bridgeData.ipaddress, 'hue-controller2')
-                                        const bData = { user, host: bridgeData.ipaddress }
-                                        localStorage.setItem("bridgeData", JSON.stringify(bData))
-                                        props.setbridgeData(bData)
-                                    } catch (err) {
-                                        setStatus(false)
-                                        newMsg.current = 'Link button not pressed! Try again'
-                                    }
-                                }}
-                        >
-                            Connect
-            </button>
-                    )
-                }
-            </div>
-        </animated.div>
-    )
-}
-
-export default CreateUser
+export default CreateUser;
