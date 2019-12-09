@@ -67,14 +67,11 @@ export const getLights = () => async (
   const { hueApi } = getState().bridgeData;
   try {
     let { lights } = await hueApi.lights();
-    console.log(lights);
     lights.forEach(l => {
       if (!l.state.xy) return;
-      console.log(l);
       const [x, y] = l.state.xy;
       l.state["rgb"] = xyBriToRgb(x, y, l.state.bri);
     });
-    console.log(lights);
     dispatch({
       type: UPDATE_LIGHTS,
       payload: {

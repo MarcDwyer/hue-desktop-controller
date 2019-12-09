@@ -11,14 +11,18 @@ import { useSelector, useDispatch } from "react-redux";
 import { checkUser, getLights } from "../../actions/hue_actions";
 
 import "./main.scss";
+import { changeTheme } from "../../actions/theme_actions";
 
 const Main = () => {
-  const { theme, bridgeData } = useSelector((state: ReduxeStore) => state);
+  const { themeData, bridgeData } = useSelector((state: ReduxeStore) => state);
   const dispatch = useDispatch();
   const { bData, lights, selected } = bridgeData;
+  const { theme } = themeData;
 
   useEffect(() => {
     dispatch(checkUser());
+    const darkMode = JSON.parse(localStorage.getItem("isDark"));
+    dispatch(changeTheme(darkMode));
   }, []);
   useEffect(() => {
     if (bData && !lights) {

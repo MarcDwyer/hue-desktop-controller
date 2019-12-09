@@ -3,18 +3,33 @@ import { Action } from ".";
 export const DEFAULT_THEME = Symbol(),
   DARK_THEME = Symbol();
 
-export type MyTheme = {
+type MyTheme = {
   backgroundColor: string;
+  navColor: string;
 };
-const initTheme: MyTheme = {
-  backgroundColor: "inherit"
+export type ThemeData = {
+  theme: MyTheme;
+  isDark: boolean;
 };
-const ThemeReducer = (state = initTheme, { type, payload }: Action) => {
+const defaultTheme = {
+  backgroundColor: "inherit",
+  navColor: "black"
+};
+
+const darkTheme = {
+  backgroundColor: "black",
+  navColor: "#2B2C2D"
+};
+
+const ThemeReducer = (
+  state: ThemeData = { theme: defaultTheme, isDark: false },
+  { type }: Action
+) => {
   switch (type) {
     case DEFAULT_THEME:
-      return { backgroundColor: "inherit" };
+      return { theme: defaultTheme, isDark: false };
     case DARK_THEME:
-      return { backgroundColor: "black" };
+      return { theme: darkTheme, isDark: true };
     default:
       return state;
   }

@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import BridgeReducer, { InitBridge } from "./bridge_reducer";
-import ThemeReducer, { MyTheme } from "./theme_reducer";
+import ThemeReducer, { ThemeData } from "./theme_reducer";
 
 export type Action = {
   payload?: any;
@@ -8,10 +8,10 @@ export type Action = {
 };
 export type ReduxeStore = {
   bridgeData: InitBridge;
-  theme: MyTheme;
+  themeData: ThemeData;
 };
 
 export default combineReducers({
   bridgeData: BridgeReducer,
-  theme: ThemeReducer
+  themeData: ThemeReducer
 });

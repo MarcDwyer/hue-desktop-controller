@@ -5,6 +5,8 @@
   overflow-y: auto;
   overflow-x: hidden;
   transition: background-color 1s ease;
+  flex-direction: column;
+
   .authenticated {
     height: 100%;
     width: 100%;
