@@ -1,90 +1,66 @@
-import React, { Component } from 'react'
-import { LightParent, ColorPayload, LightType } from '../Main/main'
-import { SketchPicker, RGBColor } from 'react-color';
-import { debounce } from 'lodash'
-import { createPortal } from 'react-dom'
-import { Spring } from 'react-spring/renderprops'
-import './config.scss'
+import React from "react";
+import { SketchPicker, RGBColor } from "react-color";
+import { createPortal } from "react-dom";
+import { Spring } from "react-spring/renderprops";
+import { useSelector, useDispatch } from "react-redux";
+import { ReduxeStore } from "../../reducers";
+import { updateSelected, colorChange } from "../../actions/light_actions";
+import { useDebouncedCallback } from "use-debounce/lib";
 
-interface Props {
-    selectedLight: number | null;
-    lights: LightParent;
-    setLight: Function;
-    alterLight: Function;
-}
-export interface ColorPayload {
-    hex: string;
-    newrgb?: number[];
-    rgb: RGBColor;
-}
-type State = {
-    range: number;
-}
+import "./config.scss";
 
-class ColorPicker extends Component<Props, State>{
-    private light: LightType | null;
-    constructor(props: Props) {
-        super(props)
-        const { lights, selectedLight } = this.props
-        this.sendColor = debounce(this.sendColor, 750)
-        this.light = lights[selectedLight]
-        this.state = {
-            range: this.light ? this.light.state.bri : 0
-        }
-    }
-
-    componentDidUpdate(prevProps: Props) {
-        const { lights, selectedLight } = this.props
-        if (prevProps.selectedLight !== this.props.selectedLight && typeof selectedLight === 'number') {
-            this.light = lights[selectedLight]
-            this.setState({ range: lights[selectedLight].state.bri })
-        }
-    }
-    sendColor = (id: number, rgb: RGBColor) => {
-        this.props.alterLight(id, [rgb.r, rgb.g, rgb.b], "color")
-    }
-    render() {
-        const { rgb } = this.light
-        return createPortal(
-            <div
-                className="config-parent"
-                onClick={(e) => {
-                    //@ts-ignore
-                    if (e.target.className !== "config-parent") return
-                    this.props.setLight(null)
-
+const ColorPicker = () => {
+  const [selected, lights] = useSelector(({ bridgeData }: ReduxeStore) => [
+    bridgeData.selected,
+    bridgeData.lights
+  ]);
+  const [sendColor] = useDebouncedCallback(
+    (index: number, rgb: RGBColor) => dispatch(colorChange(index, rgb)),
+    250
+  );
+  const dispatch = useDispatch();
+  if (!selected || !lights || (lights[selected] && !lights[selected].state.rgb))
+    return null;
+  const light = lights[selected];
+  const [r, g, b] = light.state.rgb;
+  return createPortal(
+    <div
+      className="config-parent"
+      onClick={e => {
+        //@ts-ignore
+        if (e.target.className !== "config-parent") return;
+        dispatch(updateSelected(null));
+      }}
+    >
+      <Spring
+        to={{ opacity: 1, transform: "translateY(0%" }}
+        from={{ opacity: 0, transform: "translateY(-50%)" }}
+      >
+        {props => {
+          return (
+            <div className="configuration" style={{ ...props }}>
+              <SketchPicker
+                width="350px"
+                color={{
+                  r,
+                  g,
+                  b
                 }}
-            >
-                <Spring
-                    to={{ opacity: 1, transform: "translateY(0%" }}
-                    from={{ opacity: 0, transform: "translateY(-50%)" }}
-                >
-                    {(props) => {
-                        return (
-                            <div className="configuration" style={{ ...props }}>
-                                <SketchPicker
-                                    width="350px"
-                                    color={{
-                                        r: rgb[0],
-                                        g: rgb[1],
-                                        b: rgb[2]
-                                    }}
-                                    onChangeComplete={(color) => {
-                                        this.sendColor(this.light.id, color.rgb)
-                                    }}
-                                />
-                                <button 
-                                className="exit"
-                                onClick={() => this.props.setLight(null)}
-                                >EXIT</button>
-                            </div>
-                        )
-                    }}
-                </Spring>
-            </div>,
-            document.querySelector('#root')
-        )
-    }
-}
+                onChangeComplete={color => sendColor(selected, color.rgb)}
+              />
+              <button
+                className="exit"
+                onClick={() => dispatch(updateSelected(null))}
+              >
+                EXIT
+              </button>
+            </div>
+          );
+        }}
+      </Spring>
+    </div>,
+    document.querySelector("#root")
+  );
+};
 
-export default ColorPicker
+export default ColorPicker;
