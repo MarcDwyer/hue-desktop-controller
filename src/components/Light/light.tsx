@@ -59,7 +59,6 @@ const Light = (props: Props) => {
     }
   }, [range]);
   const lightStyle = getStyles(light);
-  const isRgb = "rgb" in light.state;
   return (
     <div className="light-parent" style={{ ...lightStyle, cursor: "pointer" }}>
       <Switch

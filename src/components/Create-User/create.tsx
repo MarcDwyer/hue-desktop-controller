@@ -1,5 +1,4 @@
-import React, { useState, useRef } from "react";
-import { BeatLoader } from "react-spinners";
+import React from "react";
 import { css } from "@emotion/core";
 import { useSpring, animated } from "react-spring";
 import { useDispatch, useSelector } from "react-redux";

@@ -4,7 +4,7 @@
   display: flex;
   overflow-y: auto;
   overflow-x: hidden;
-
+  transition: background-color 1s ease;
   .authenticated {
     height: 100%;
     width: 100%;
