@@ -1,5 +1,4 @@
 import React from "react";
-import { css } from "@emotion/core";
 import { useSpring, animated } from "react-spring";
 import { useDispatch, useSelector } from "react-redux";
 import { registerNewUser } from "../../actions/hue_actions";
@@ -13,9 +12,6 @@ const CreateUser = () => {
   const [errorMsg] = useSelector((state: ReduxeStore) => [
     state.bridgeData.errorMsg
   ]);
-  const loader = css`
-    margin: 25px auto auto auto;
-  `;
 
   const createDiv = useSpring({
     opacity: 1,
@@ -24,7 +20,8 @@ const CreateUser = () => {
   return (
     <animated.div className="create-div" style={createDiv}>
       <div className="inner-content">
-        {errorMsg && <h2 className="set-bridge-message">{errorMsg}</h2>}
+        <h2>Press the button on your Philips Hue Bridge then click connect!</h2>
+        {errorMsg && <h4 className="set-bridge-message">{errorMsg}</h4>}
         <img src={HueImage} alt="bridge" />
         <button onClick={() => dispatch(registerNewUser())}>Connect</button>
         {/* {status ? (

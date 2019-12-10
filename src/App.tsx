@@ -8,10 +8,13 @@ import Navbar from "./components/Settings/settings";
 
 const App = () => {
   const [themeData] = useSelector((state: ReduxeStore) => [state.themeData]);
- const { theme, isDark} = themeData
+  const { theme, isDark } = themeData;
   return (
     <Router>
-      <div className="main-container" style={{backgroundColor: theme.backgroundColor}}>
+      <div
+        className="main-container"
+        style={{ backgroundColor: theme.backgroundColor, color: theme.color }}
+      >
         <Navbar />
         <Route path="/" component={Main} />
       </div>

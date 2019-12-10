@@ -11,7 +11,6 @@ import Popper from "@material-ui/core/Popper";
 import Switch from "react-switch";
 
 import { ReduxeStore } from "../../reducers";
-import { Link } from "react-router-dom";
 
 type IProps = {
   open: boolean;
