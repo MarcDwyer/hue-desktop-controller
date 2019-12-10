@@ -1,0 +1,50 @@
+nav {
+  display: flex;
+  height: 45px;
+  border: none;
+  box-shadow: none;
+
+  .drop-div {
+    margin: auto 55px auto auto;
+    z-index: 2000;
+  }
+
+  .sub-menu {
+    display: flex;
+    flex-direction: column;
+    padding: 15px 15px;
+
+    .link {
+      text-align: center;
+      cursor: pointer;
+      &:hover {
+        background-color: black;
+      }
+    }
+
+    .menu-item {
+      height: 35px;
+      width: 100%;
+      display: flex;
+      border-radius: 5px;
+      padding: 5px;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.25);
+      }
+    }
+    .dark-mode {
+      .switch {
+        margin: auto;
+      }
+      span {
+        margin: auto 5px auto auto;
+      }
+    }
+  }
+}
+
+#menu-list-grow {
+  font-size: 12px;
+  display: flex;
+}

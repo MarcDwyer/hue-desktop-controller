@@ -6,25 +6,31 @@ export const DEFAULT_THEME = Symbol(),
 type MyTheme = {
   backgroundColor: string;
   navColor: string;
+  color: string;
 };
 export type ThemeData = {
   theme: MyTheme;
   isDark: boolean;
 };
-const defaultTheme = {
-  backgroundColor: "inherit",
-  navColor: "black"
+
+const defaultTheme: MyTheme = {
+  backgroundColor: "#eee",
+  navColor: "#D6D6D6",
+  color: "black"
 };
 
 const darkTheme = {
-  backgroundColor: "black",
-  navColor: "#2B2C2D"
+  backgroundColor: "#1a1a1a",
+  navColor: "#282828",
+  color: "#eee"
 };
 
-const ThemeReducer = (
-  state: ThemeData = { theme: defaultTheme, isDark: false },
-  { type }: Action
-) => {
+const initTheme: ThemeData = {
+  theme: defaultTheme,
+  isDark: false
+};
+
+const ThemeReducer = (state: ThemeData = initTheme, { type }: Action) => {
   switch (type) {
     case DEFAULT_THEME:
       return { theme: defaultTheme, isDark: false };

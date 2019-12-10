@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import Light from "../Light/light";
 
-import ThemeChanger from "../Change-Theme/change-theme";
 import CreateUser from "../Create-User/create";
 import ColorPicker from "../Configuration/config";
 
@@ -31,11 +30,7 @@ const Main = () => {
   }, [bData]);
 
   return (
-    <div
-      className="main container"
-      style={{ backgroundColor: theme.backgroundColor }}
-    >
-      <ThemeChanger />
+    <div className="main container">
       {!bData && <CreateUser />}
       {lights && (
         <div className="authenticated">

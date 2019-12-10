@@ -13,11 +13,11 @@ function createWindow() {
         },
         backgroundColor: "#303133",
         autoHideMenuBar: true,
-        icon: '../icons/hue.ICO'
+        icon: "../icons/hc.png"
     });
-    mainWindow.loadURL(isDev ?
-        "http://localhost:3000" :
-        "file://" + path.join(__dirname, "../build/index.html"));
+    mainWindow.loadURL(isDev
+        ? "http://localhost:3000"
+        : "file://" + path.join(__dirname, "../build/index.html"));
     mainWindow.on("closed", function () { return (mainWindow = null); });
 }
 electron_1.app.on("ready", createWindow);
