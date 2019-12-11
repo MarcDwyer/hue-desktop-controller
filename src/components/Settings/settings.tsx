@@ -1,8 +1,6 @@
 import React, { useState, useCallback } from "react";
 
-import { useDispatch, useSelector } from "react-redux";
-
-import { ReduxeStore } from "../../reducers";
+import { useDispatch } from "react-redux";
 
 import Dropdown from "./drop-down";
 

@@ -10,7 +10,7 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true
     },
-    backgroundColor: "#303133",
+    backgroundColor: "#eee",
     autoHideMenuBar: true,
     icon: "../icons/hc.png"
   });
