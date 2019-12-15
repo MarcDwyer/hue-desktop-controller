@@ -50,6 +50,7 @@ export const registerNewUser = () => async (
 };
 export const checkUser = () => async dispatch => {
   const bData: BridgeData = JSON.parse(localStorage.getItem("bridgeData"));
+  console.log(bData);
   if (!bData) return;
   dispatch({
     type: SET_BRIDGE_DATA,

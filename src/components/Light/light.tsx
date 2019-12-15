@@ -17,8 +17,8 @@ interface Props {
 }
 const checkRgb = (rgb: number[]): boolean => {
   let count = 0;
-  for (let x = 0, len = rgb.length; x < len; x++) {
-    if (rgb[x] > 165) count++;
+  for (const val of rgb) {
+    if (val > 165) count++;
   }
   return count >= 2;
 };
@@ -41,17 +41,24 @@ const getStyles = (light: MyLight): Object => {
 
   return styles;
 };
+type State = {
+  range: number;
+  name: string;
+  disabled: boolean;
+};
 const Light = (props: Props) => {
   const { light } = props;
   const dispatch = useDispatch();
-  const [range, setRange] = useState<number>(light.state.bri);
+  const [state, setState] = useState<State>({
+    range: light.state.bri,
+    name: light.name,
+    disabled: true
+  });
+  const { range, name, disabled } = state;
   const prevRange = useRef<number>(range);
-  const [disabled, setDisabled] = useState<boolean>(true);
-  const [name, setName] = useState<string>(light.name);
   const [sendBright] = useDebouncedCallback(() => {
     dispatch(brightChange(props.index, range));
   }, 450);
-
   useEffect(() => {
     if (prevRange.current !== range) {
       prevRange.current = range;
@@ -59,6 +66,8 @@ const Light = (props: Props) => {
     }
   }, [range]);
   const lightStyle = getStyles(light);
+  const stateSetter = (key: string, value: any) =>
+    setState(state => ({ ...state, [key]: value }));
   return (
     <div className="light-parent" style={{ ...lightStyle, cursor: "pointer" }}>
       <Switch
@@ -78,7 +87,7 @@ const Light = (props: Props) => {
             className={`hideme ${!disabled ? "disabled" : ""}`}
             onClick={e => {
               e.stopPropagation();
-              setDisabled(true);
+              stateSetter("disabled", true);
             }}
           ></div>
         )}
@@ -90,7 +99,7 @@ const Light = (props: Props) => {
               if (!disabled) {
                 return;
               }
-              setDisabled(false);
+              setState(state => ({ ...state, disabled: false }));
             }}
           />
           <input
@@ -100,7 +109,7 @@ const Light = (props: Props) => {
             disabled={disabled}
             className={!disabled ? "activated-input" : ""}
             onClick={e => e.stopPropagation()}
-            onChange={e => setName(e.target.value)}
+            onChange={e => stateSetter("name", e.target.value)}
           />
         </div>
       </div>
@@ -110,7 +119,7 @@ const Light = (props: Props) => {
           min={0}
           max={254}
           value={range}
-          onChange={e => setRange(parseInt(e.target.value))}
+          onChange={e => stateSetter("range", e.target.value)}
         />
       </div>
     </div>

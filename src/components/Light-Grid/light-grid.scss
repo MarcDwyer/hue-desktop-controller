@@ -1,0 +1,18 @@
+.light-grid {
+  display: flex;
+  width: 100%;
+
+  .subdiv {
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+
+    @media (min-width: 1920px) {
+      width: 75%;
+    }
+    @media (max-width: 1250px) {
+      width: 95%;
+    }
+  }
+}

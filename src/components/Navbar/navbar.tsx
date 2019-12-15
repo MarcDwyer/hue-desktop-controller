@@ -1,15 +1,12 @@
 import React, { useState, useCallback } from "react";
 
-import { useDispatch } from "react-redux";
-
 import Dropdown from "./drop-down";
 
-import "./settings.scss";
+import "./navbar.scss";
 
-const Navbar = () => {
+const Navbar = React.memo(() => {
   const [toggle, setToggle] = useState<boolean>(false);
-  const dispatch = useDispatch();
-
+  console.log("navbar");
   const handleToggle = useCallback((chng: boolean) => setToggle(chng), [
     toggle
   ]);
@@ -18,6 +15,6 @@ const Navbar = () => {
       <Dropdown open={toggle} setOpen={handleToggle} />
     </nav>
   );
-};
+});
 
 export default Navbar;

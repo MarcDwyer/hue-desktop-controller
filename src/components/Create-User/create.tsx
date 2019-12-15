@@ -12,7 +12,7 @@ const CreateUser = () => {
   const [errorMsg] = useSelector((state: ReduxeStore) => [
     state.bridgeData.errorMsg
   ]);
-
+  console.log("hello world");
   const createDiv = useSpring({
     opacity: 1,
     from: { opacity: 0 }
