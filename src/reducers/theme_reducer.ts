@@ -3,7 +3,7 @@ import { Action } from ".";
 export const DEFAULT_THEME = Symbol(),
   DARK_THEME = Symbol();
 
-type MyTheme = {
+export type MyTheme = {
   backgroundColor: string;
   navColor: string;
   color: string;

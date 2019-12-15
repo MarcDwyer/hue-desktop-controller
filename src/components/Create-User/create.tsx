@@ -12,7 +12,6 @@ const CreateUser = () => {
   const [errorMsg] = useSelector((state: ReduxeStore) => [
     state.bridgeData.errorMsg
   ]);
-  console.log("hello world");
   const createDiv = useSpring({
     opacity: 1,
     from: { opacity: 0 }
@@ -24,11 +23,6 @@ const CreateUser = () => {
         {errorMsg && <h4 className="set-bridge-message">{errorMsg}</h4>}
         <img src={HueImage} alt="bridge" />
         <button onClick={() => dispatch(registerNewUser())}>Connect</button>
-        {/* {status ? (
-          <BeatLoader color="#eee" css={loader} />
-        ) : (
-         
-        )} */}
       </div>
     </animated.div>
   );

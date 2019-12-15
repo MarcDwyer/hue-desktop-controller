@@ -6,6 +6,7 @@ import { ReduxeStore } from "./reducers";
 import Main from "./components/Main-App/main-app";
 import Navbar from "./components/Navbar/navbar";
 import CreateUser from "./components/Create-User/create";
+import LoadingScreen from "./components/Loading-Screen/loading";
 
 import { checkUser } from "./actions/hue_actions";
 import { changeTheme } from "./actions/theme_actions";
@@ -48,6 +49,7 @@ const App = (props: RouteChildrenProps) => {
         ),
         []
       )}
+      <Route path="/loading" component={LoadingScreen} />
     </div>
   );
 };

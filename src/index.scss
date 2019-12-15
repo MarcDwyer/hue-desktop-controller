@@ -21,5 +21,6 @@ code {
 
 .main-container,
 nav {
+  transition: color 1s ease;
   transition: background-color 1s ease;
 }
