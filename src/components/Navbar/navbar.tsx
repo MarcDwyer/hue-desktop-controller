@@ -11,7 +11,7 @@ const Navbar = React.memo(() => {
     toggle
   ]);
   return (
-    <nav style={{}}>
+    <nav>
       <Dropdown open={toggle} setOpen={handleToggle} />
     </nav>
   );
