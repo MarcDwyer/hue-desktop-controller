@@ -1,37 +1,36 @@
 .config-parent {
+  display: flex;
+  position: absolute;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  color: #eee;
+  background-color: rgba(0, 0, 0, 0.65);
+
+  .configuration {
     display: flex;
-    position: absolute;
-    z-index: 1000;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 100vw;
-    color: #eee;
-    background-color: rgba(68, 69, 71, 0.75);
+    flex-direction: column;
+    margin: auto;
+    background-color: #eee;
+    border-radius: 5px;
+    padding: 55px 55px;
 
-    .configuration {
-        display: flex;
-        flex-direction: column;
-        margin: auto;
-        background-color: #eee;
-        border-radius: 5px;
-        padding: 15px 15px;
-
-        .sketch-picker {
-            margin: auto;
-            margin-bottom: 15px;
-            z-index: 2000;
-            height: 100%;
-        }
-
-        button {
-            color: #FF4C4C;
-            outline: none;
-            border: none;
-            border: solid 1px #FF4C4C;
-            background-color: transparent;
-            padding: 15px 15px;
-            cursor: pointer;
-        }
+    .sketch-picker {
+      margin: auto;
+      margin-bottom: 15px;
+      z-index: 2000;
+      height: 100%;
     }
+
+    button {
+      outline: none;
+      border: none;
+      border: solid 1px #ff4c4c;
+      background-color: transparent;
+      padding: 15px 15px;
+      cursor: pointer;
+    }
+  }
 }

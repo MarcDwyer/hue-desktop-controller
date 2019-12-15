@@ -6,7 +6,6 @@ import ColorPicker from "../Configuration/config";
 import "./main.scss";
 
 const MainApp = () => {
-  console.log("main");
   return (
     <React.Fragment>
       <div className="authenticated">

@@ -3,8 +3,9 @@ import { useSelector, useDispatch } from "react-redux";
 import Light from "../Light/light";
 import { getLights } from "../../actions/hue_actions";
 
-import "./light-grid.scss";
 import { ReduxeStore } from "../../reducers";
+
+import "./light-grid.scss";
 
 const LightGrid = () => {
   const lights = useSelector((state: ReduxeStore) => state.bridgeData.lights);

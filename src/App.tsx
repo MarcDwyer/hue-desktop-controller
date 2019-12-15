@@ -13,7 +13,8 @@ import { changeTheme } from "./actions/theme_actions";
 
 export const routes = {
   main: "/main-app",
-  createUser: "/create-user"
+  createUser: "/create-user",
+  loading: "/loading"
 };
 
 const App = (props: RouteChildrenProps) => {
@@ -42,14 +43,14 @@ const App = (props: RouteChildrenProps) => {
       style={{ backgroundColor: theme.backgroundColor, color: theme.color }}
     >
       <Navbar />
-      <Route path="/create-user" component={CreateUser} />
+      <Route path={routes.createUser} component={CreateUser} />
       {useMemo(
         () => (
-          <Route path="/main-app" component={Main} />
+          <Route path={routes.main} component={Main} />
         ),
         []
       )}
-      <Route path="/loading" component={LoadingScreen} />
+      <Route path={routes.loading} component={LoadingScreen} />
     </div>
   );
 };

@@ -46,7 +46,6 @@ const BridgeReducer = (state = initBridge, { payload, type }: Action) => {
       return { ...state, ...payload };
     case UPDATE_SINGLE_LIGHT:
       const lCopy = [...state.lights];
-      console.log(payload);
       lCopy[payload.index].state[payload.key] = payload.value;
       return { ...state, lights: lCopy };
     case SET_SELECTED:

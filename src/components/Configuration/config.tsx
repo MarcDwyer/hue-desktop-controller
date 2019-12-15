@@ -10,9 +10,14 @@ import { useDebouncedCallback } from "use-debounce/lib";
 import "./config.scss";
 
 const ColorPicker = () => {
-  const [selected, lights] = useSelector(({ bridgeData }: ReduxeStore) => [
+  const [
+    selected,
+    lights,
+    theme
+  ] = useSelector(({ bridgeData, themeData }: ReduxeStore) => [
     bridgeData.selected,
-    bridgeData.lights
+    bridgeData.lights,
+    themeData.theme
   ]);
   const [sendColor] = useDebouncedCallback(
     (index: number, rgb: RGBColor) => dispatch(colorChange(index, rgb)),
@@ -38,7 +43,10 @@ const ColorPicker = () => {
       >
         {props => {
           return (
-            <div className="configuration" style={{ ...props }}>
+            <div
+              className="configuration"
+              style={{ ...props, backgroundColor: theme.backgroundColor }}
+            >
               <SketchPicker
                 width="350px"
                 color={{
@@ -50,6 +58,10 @@ const ColorPicker = () => {
               />
               <button
                 className="exit"
+                style={{
+                  border: `${theme.color} 1px solid`,
+                  color: theme.color
+                }}
                 onClick={() => dispatch(updateSelected(null))}
               >
                 EXIT
