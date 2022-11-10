@@ -171,7 +171,7 @@
     ]
   },
   "devDependencies": {
-    "electron": "5.0.6",
+    "electron": "18.3.7",
     "electron-builder": "^20.44.4",
     "electron-packager": "^14.0.1",
     "eslint-plugin-react-hooks": "^1.7.0",
